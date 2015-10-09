@@ -1,0 +1,220 @@
+doctype html
+html
+  head
+    meta(charset='utf-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1, maximum-scale=1')
+    title My awesome presentation
+
+    link(rel='stylesheet', type='text/css', href='build/build.css')
+
+  body
+
+    article
+
+      section
+        h2 Introduction to RxJS
+        h3
+          a(href='https://twitter.com/Chasmo90') @Chasmo90
+        img.avatar.avatar--small(src='images/profile.jpg')
+
+      section
+        h3 Agenda
+        ul.bullet
+          li Was ist RxJS
+          li Wie erstellt man Observables (Events, Collections)
+          li Transformationen (map, filter)
+          li Resilience (onError, evtl. Divide by Zero)
+          li Beispiel Konami
+          li Beispiel Wikipedia
+      section
+        h3 What's important in frontend development?
+        ul.bullet
+          li React to DOM Events
+          li React to User Interactions
+          li Handling Animations
+          li Handling Requests / Responses
+      section.gif.gif--waiting
+        h1 MOSTLY BLOCKING
+      section
+        h2 If This Than That Else ...
+        pre
+          code.language-javascript.
+            if (domObject.classList.contains('someClass')) {
+                // do some stuff...
+            }
+      section.gif.gif--rescue
+        h1 CALLBACKS TO THE RESCUE
+      section
+        h2 The usual way with callbacks
+        pre
+          code.language-javascript.
+            object.addEventListener('click', function(e) {
+              // do some stuff...
+            });
+      section
+        h2 And then ... 
+        pre
+          code.language-javascript.
+            object.addEventListener('click', function(err, data) {
+              if (err) return errorFn(e);
+              doAsyncFoo(data, function(err, data) {
+                // do some stuff...
+              })
+            });
+      section.png.png--callbackcode
+        h1 CALLBACK HELL
+      section.gif.gif--rescue
+        h1 PROMISES TO THE RESCUE
+      section
+        h2 The usual promise way
+        pre
+          code.language-javascript.
+            Q.fcall(promisedStep1)
+              .then(successFn, errorFn)
+              .then(promisedStep3)
+              .then(promisedStep4)
+              .then(function (value4) {
+                  // Do something with value4
+              })
+              .catch(function (error) {
+                  // Handle any error from all above steps
+              }).done();
+      section
+        h2 So why RxJS?
+      section
+        h2 Advantages over <b>Promises</b>
+        ul.bullet
+          li RxJS is Promises++
+          li A Promise is simply a stream with one single emitted value
+          li Streams go beyond promises by allowing many returned values and useful operations
+          li Observables can be cancelled
+      section
+        h3 Advantages over <b>Array</b> operations
+        ul.bullet
+          li Observables represents a push based iterable
+          li No intermediate collections
+          li Less GC activity
+          li Lazy evaluated
+      section
+        h2 What is a Stream?
+        ul.bullet
+          li A stream is a sequence
+          li of ongoing events
+          li ordered in time
+      section.png.png--overview
+      section
+        h2 From Promises to Observables
+        pre
+          code.language-javascript.
+            observable.subscribe(successFn, errorFn);
+                    promise.then(successFn, errorFn);
+      section
+        h2 With optional complete
+        pre
+          code.language-javascript.
+            observable.subscribe(successFn, errorFn, completeFn);
+                    promise.then(successFn, errorFn);
+      section
+        h2 How to use RxJS
+        ul.bullet
+          li All your variables can be streams
+          li Think about where they come from (entries)
+          li Make your sideeffects explicit (exits)
+      section
+        h2 Common entry points
+
+      section
+        h3 The Manual way
+        pre
+          code.language-javascript.
+            Rx.Observable.create(function (observer) {
+              observer.onNext(42);
+              observer.onCompleted();
+            }
+      section
+        h3 From Variables / Collections
+        pre
+          code.language-javascript.
+            Rx.Observable.just(42);
+            Rx.Observable.range(42, 1337);
+            Rx.Observable.from(1,2,3);
+            Rx.Observable.from([1,2,3]);
+      section
+        h3 From Events
+        pre
+          code.language-javascript.
+            Rx.Observable.fromEvent(input, 'click');
+            Rx.Observable.fromNodeCallback(fn);
+            Rx.Observable.ofArrayChanges(myArr);
+            Rx.Observable.ofObjectChanges(myObj);
+      section
+        h3 From Promises / Network Calls
+        pre
+          code.language-javascript.
+            Rx.Observable.fromPromise(myPromise);
+            Rx.Observable.startAsync(function () {
+                return RSVP.Promise.resolve(42);
+            });
+      section
+        h3 From Time Intervals
+        pre
+          code.language-javascript.
+            Rx.Observable.interval(500 /* ms */)
+            Rx.Observable.timer(200, 100)
+      section
+        h2 Common exit points
+        ul.bullet
+          li New Events
+          li View Updates
+          li Persistence
+      section
+        h2 Synchronized operations
+        ul.bullet
+          li filter
+          li map
+          li reduce
+          li take
+          li skip
+          li concat
+          li merge
+          li zip
+          li flatMap
+      section
+        h2 Async operations
+        ul.bullet
+          li buffer
+          li window
+          li combineLatest
+          li scan
+          li flatMapLatest
+          li withLatestFrom
+      section
+        h3 <i>“Stream processing lets us model systems that have state without ever using assignment or mutable data.”</i>
+        p Structure and Interpretation <br /> of Computer Programs
+      section.gif.gif--awesome
+        h1 Awesome
+      section.gif.gif--hotcold
+        h1 Hot vs Cold Observables
+      section
+        h2 Hot Observables
+        ul.bullet
+          li Begins emitting immediately after creation
+          li New Observers may start observing the sequence somewhere in the middle
+          li e.g. Timers in an interval or UI Events
+      section
+        h2 Cold Observables
+        ul.bullet
+          li Waits until an observer subscribes
+          li observer is guaranteed to see the whole sequence from the beginning
+          li e.g. Observables of Collections
+      
+      section.png.png--dblclick
+
+      section
+        h2 Conclusion
+        ul.bullet
+          li Easy to write async code
+          li Helps to write modular and composable code
+          li Lets us model systems that have state without mutable state
+
+    script(src='build/build.js')
